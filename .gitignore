@@ -37,6 +37,7 @@ captures/
 .idea/workspace.xml
 .idea/*
 
-app/src/main/res/values/apikeys.xml
+
 # Keystore files
 *.jks
+app/src/main/res/values/apikeys.xml

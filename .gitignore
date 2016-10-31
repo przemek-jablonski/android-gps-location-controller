@@ -35,6 +35,8 @@ captures/
 # Intellij
 *.iml
 .idea/workspace.xml
+.idea/*
 
+app/src/main/res/values/apikeys.xml
 # Keystore files
 *.jks

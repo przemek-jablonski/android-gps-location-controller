@@ -3,6 +3,7 @@ package com.android.szparag.gpslocationcontroller;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,16 +12,20 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,6 +41,12 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
 
     MapView mapView;
     Bundle bundle;
+
+    Location lastKnownLocation;
+
+    GoogleMap map;
+
+    GoogleApiClient googleApiClient;
 
     private static final String MAPVIEW_BUNDLE_KEY = "mapviewbundlekey";
 
@@ -58,8 +69,6 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         if (savedInstanceState != null) {
             bundle  = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }
-
-        ((GpsLocationControllerApplication) getActivity().getApplication()).getGoogleApiClient().connect();
     }
 
     @Override
@@ -90,6 +99,10 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     public void onStart() {
         super.onStart();
         mapView.onStart();
+        googleApiClient = ((GpsLocationControllerApplication) getActivity().getApplication()).getGoogleApiClient();
+        googleApiClient.registerConnectionCallbacks(this);
+        googleApiClient.registerConnectionFailedListener(this);
+        googleApiClient.connect();
     }
 
     @Override
@@ -108,6 +121,7 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     public void onStop() {
         super.onStop();
         mapView.onStop();
+        googleApiClient.disconnect();
     }
 
 
@@ -120,26 +134,32 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+        mapView.onLowMemory();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    //todo: why unbinder should be here
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        ((GpsLocationControllerApplication) getActivity().getApplication()).getGoogleApiClient().connect();
-    }
 
 
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions().position(new LatLng(50, 50)).title("Marker"));
+        this.map = map;
+        if (lastKnownLocation != null) {
+            moveCameraLocation(lastKnownLocation, 18L);
+        }
     }
 
+
+    private void moveCameraLocation(Location location, float zoomValue) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomValue));
+        map.addCircle(new CircleOptions()
+                .center(latLng)
+                .radius(10) //in meters
+                .strokeColor(ContextCompat.getColor(getContext(), R.color.app_triadic_purple_lighter))
+                .fillColor(ContextCompat.getColor(getContext(), R.color.app_triadic_purple_lighter_alpha))
+        );
+//        map.addMarker(new MarkerOptions().position(latLng).title("pos"));
+//                this.map.addMarker(new MarkerOptions().position(new LatLng(50, 50)).title("Marker"));
+    }
 
     //google play location service callbacks:
     @Override
@@ -153,9 +173,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return ;
+
+//            return ;
         }
-        Location loc = LocationServices.FusedLocationApi.getLastLocation(((GpsLocationControllerApplication) getActivity().getApplication()).getGoogleApiClient());
+        lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(((GpsLocationControllerApplication) getActivity().getApplication()).getGoogleApiClient());
+        moveCameraLocation(lastKnownLocation, 18L);
     }
 
     @Override

@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.android.szparag.gpslocationcontroller.MainActivity">
+    <item
+        android:id="@+id/action_region_new"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="Mark unread"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_policies_new"
+        android:icon="@drawable/ic_blur_on_black_24dp"
+        android:title="Facebook"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_region_list"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:title="Google+"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="Twitter"
+        app:showAsAction="ifRoom" />
+</menu>

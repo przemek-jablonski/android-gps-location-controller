@@ -4,12 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.android.szparag.gpslocationcontroller.MainMapFragment">
 
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:text="@string/hello_blank_fragment" />-->
-
     <com.google.android.gms.maps.MapView
         android:id="@+id/main_map_mapview"
         android:layout_width="match_parent"

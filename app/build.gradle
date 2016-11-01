@@ -27,16 +27,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
-
-
-
-
-
-
-
-
-
+    compile 'com.github.rubensousa:floatingtoolbar:1.2.1'
 
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'

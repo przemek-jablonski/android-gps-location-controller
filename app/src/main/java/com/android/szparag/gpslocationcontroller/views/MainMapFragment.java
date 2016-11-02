@@ -38,12 +38,14 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 import static com.google.android.gms.common.api.GoogleApiClient.*;
 
@@ -88,15 +90,7 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         regionQuickViewAdapter = new RegionRecyclerViewAdapter(null);
         regionQuickView.setAdapter(regionQuickViewAdapter);
 
-        List<Region> mockList = new LinkedList<>();
-        Location mockLocation  = new Location("49.778733, 22.778920");
-        mockLocation.setLatitude(49.77870f);
-        mockLocation.setLongitude(22.7788f);
-        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_business_center_black_24dp)));
-        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_school_black_24dp)));
-        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_location_city_black_24dp)));
-        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_airline_seat_flat_black_24dp)));
-        regionQuickViewAdapter.updateItems(mockList);
+        regionQuickViewAdapter.updateItems(Realm.getDefaultInstance().where(Region.class).findAll());
     }
 
     @Override
@@ -189,6 +183,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     @Override
     public void onMapReady(GoogleMap map) {
         this.map = map;
+
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.googlemaps_style_2));
+
+
         if (lastKnownLocation != null) {
             moveCameraLocation(lastKnownLocation, 18L);
         }

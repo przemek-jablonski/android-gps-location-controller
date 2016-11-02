@@ -2,36 +2,47 @@ package com.android.szparag.gpslocationcontroller.backend.models;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import io.realm.RealmModel;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
+
 /**
  * Created by ciemek on 02/11/2016.
  */
 
-public class Region {
+@RealmClass
+public class Region implements RealmModel{
 
-    public Region(CharSequence name, Location center, Policy policy) {
-        this.name = name;
-        this.center = center;
-        this.policy = policy;
-    }
+    @PrimaryKey
+    private long    id;
+    private String  name;
+    private double  centerLat;
+    private double  centerLon;
+    private Policy  policy;
 
-    private CharSequence    name;
-    private Location        center;
-    private Policy          policy;
 
-    public CharSequence getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(CharSequence name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Location getCenter() {
-        return center;
+    public LatLng getCenter() {
+        return new LatLng(centerLat, centerLon);
     }
 
-    public void setCenter(Location center) {
-        this.center = center;
+    public void setCenter(LatLng center) {
+        centerLat = center.latitude;
+        centerLon = center.longitude;
+    }
+
+    public void setCenter(double centerLat, double centerLon) {
+        this.centerLat = centerLat;
+        this.centerLon = centerLon;
     }
 
     public Policy getPolicy() {

@@ -8,6 +8,8 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="1dp"
     android:layout_marginEnd="1dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp"
     android:layout_gravity="center"
     android:gravity="center">
     
@@ -28,6 +30,16 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/item_recycler_region_name"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="location nazwa tutej"
+            android:lines="1"
+            android:textStyle="bold"
+            android:ellipsize="end" />
+
+        <TextView
             android:id="@+id/item_recycler_region_policy"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -35,19 +47,9 @@
             android:text="policyname"
             android:lines="1"
             android:ellipsize="end"
+            android:textAllCaps="true" />
 
-            android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/item_recycler_region_name"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="nazwa regionu tutej"
-            android:lines="1"
-            android:textAllCaps="true"
-            android:ellipsize="end"
-            />
 
 
 

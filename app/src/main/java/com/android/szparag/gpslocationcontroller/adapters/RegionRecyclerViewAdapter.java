@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.szparag.gpslocationcontroller.R;
 import com.android.szparag.gpslocationcontroller.backend.models.Region;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,15 +49,26 @@ public class RegionRecyclerViewAdapter extends BaseRecyclerViewAdapter<Region> {
 
     private void onBindRegionViewHolder(RegionViewHolder holder, int position) {
         Region region = items.get(position);
+
         Picasso.with(holder.imageView.getContext())
-                .load(region.getPolicy().icon)
+                .load(region.getPolicy().getIcon())
                 .into(holder.imageView);
+
+        holder.textRegionName.setText(region.getName());
+        holder.textPolicyName.setText(region.getPolicy().getName());
     }
 
     public class RegionViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.item_recycler_region_imageview)
-        ImageView imageView;
+        ImageView   imageView;
+
+        @BindView(R.id.item_recycler_region_name)
+        TextView    textRegionName;
+
+        @BindView(R.id.item_recycler_region_policy)
+        TextView    textPolicyName;
+
 
         public RegionViewHolder(View itemView) {
             super(itemView);

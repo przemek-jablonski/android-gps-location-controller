@@ -27,19 +27,34 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+//    ui enhancements
     compile 'com.github.rubensousa:floatingtoolbar:1.2.1'
+    compile 'com.github.rubensousa:gravitysnaphelper:1.0'
 
+//    support libs
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
+
+//    google play services (maps and fusedLocationProvider)
     compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.google.android.gms:play-services-location:9.8.0'
+
+//    retrofit
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+//    butterknife
     compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.google.dagger:dagger:2.5'
-    compile 'com.android.support:support-v4:25.0.0'
-    testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+//    dagger2
+    compile 'com.google.dagger:dagger:2.5'
     apt 'com.google.dagger:dagger-compiler:2.5'
     provided 'javax.annotation:jsr250-api:1.0'
+
+//    picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    testCompile 'junit:junit:4.12'
 }

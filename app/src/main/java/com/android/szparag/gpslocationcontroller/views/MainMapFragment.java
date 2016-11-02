@@ -1,11 +1,8 @@
-package com.android.szparag.gpslocationcontroller;
+package com.android.szparag.gpslocationcontroller.views;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,23 +11,35 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.szparag.gpslocationcontroller.GpsLocationControllerApplication;
+import com.android.szparag.gpslocationcontroller.R;
+import com.android.szparag.gpslocationcontroller.adapters.RegionRecyclerViewAdapter;
+import com.android.szparag.gpslocationcontroller.backend.models.Policy;
+import com.android.szparag.gpslocationcontroller.backend.models.Region;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,13 +56,14 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     @BindView(R.id.morphingFabToolbar)
     FloatingToolbar morphingFabToolbar;
 
+    @BindView(R.id.region_recycler_quickview)
+    RecyclerView regionQuickView;
+    RegionRecyclerViewAdapter regionQuickViewAdapter;
+
     MapView mapView;
     Bundle bundle;
-
     Location lastKnownLocation;
-
     GoogleMap map;
-
     GoogleApiClient googleApiClient;
 
     private static final String MAPVIEW_BUNDLE_KEY = "mapviewbundlekey";
@@ -64,11 +74,32 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         return fragment;
     }
 
+    private void buildRegionQuickView() {
+        RecyclerView.LayoutManager manag = new LinearLayoutManager(
+                getContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false);
+        regionQuickView.setLayoutManager(manag);
+        SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+        snapHelper.attachToRecyclerView(regionQuickView);
+
+        regionQuickViewAdapter = new RegionRecyclerViewAdapter(null);
+        regionQuickView.setAdapter(regionQuickViewAdapter);
+
+        List<Region> mockList = new LinkedList<>();
+        Location mockLocation  = new Location("49.778733, 22.778920");
+        mockLocation.setLatitude(49.77870f);
+        mockLocation.setLongitude(22.7788f);
+        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_business_center_black_24dp)));
+        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_school_black_24dp)));
+        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_location_city_black_24dp)));
+        mockList.add(new Region("asd", mockLocation, new Policy("asdasd", R.drawable.ic_airline_seat_flat_black_24dp)));
+        regionQuickViewAdapter.updateItems(mockList);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        ButterKnife.bind(this, getView());
 
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
@@ -97,12 +128,15 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
                              Bundle savedInstanceState) {
         View layoutView = inflater.inflate(R.layout.fragment_main_map, container, false);
         ButterKnife.bind(this, layoutView);
+        buildRegionQuickView();
         mapView = (MapView) layoutView.findViewById(R.id.main_map_mapview);
         mapView.onCreate(bundle);
 
         morphingFabToolbar.attachFab(fab);
 
         mapView.getMapAsync(this);
+
+
         return layoutView;
     }
 
@@ -114,8 +148,6 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         googleApiClient.registerConnectionCallbacks(this);
         googleApiClient.registerConnectionFailedListener(this);
         googleApiClient.connect();
-
-
     }
 
     @Override

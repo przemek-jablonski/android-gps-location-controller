@@ -2,7 +2,7 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:name="com.android.szparag.gpslocationcontroller.MainMapFragment"
+    android:name="com.android.szparag.gpslocationcontroller.views.MainMapFragment"
     android:id="@+id/content_main_map_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

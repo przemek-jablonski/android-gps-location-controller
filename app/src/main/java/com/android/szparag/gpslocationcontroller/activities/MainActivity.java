@@ -1,4 +1,4 @@
-package com.android.szparag.gpslocationcontroller;
+package com.android.szparag.gpslocationcontroller.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.android.szparag.gpslocationcontroller.R;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;

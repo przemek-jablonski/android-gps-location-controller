@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -82,6 +83,7 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         regionQuickView.setLayoutManager(manag);
         SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
         snapHelper.attachToRecyclerView(regionQuickView);
+        ((GravitySnapHelper) snapHelper).enableLastItemSnap(false);
 
         regionQuickViewAdapter = new RegionRecyclerViewAdapter(null);
         regionQuickView.setAdapter(regionQuickViewAdapter);

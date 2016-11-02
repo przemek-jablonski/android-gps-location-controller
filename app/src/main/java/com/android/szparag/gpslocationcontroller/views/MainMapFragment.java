@@ -2,8 +2,10 @@ package com.android.szparag.gpslocationcontroller.views;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -46,6 +48,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static com.google.android.gms.common.api.GoogleApiClient.*;
 
@@ -69,6 +72,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     GoogleMap map;
     GoogleApiClient googleApiClient;
 
+    RealmResults<Region> regions;
+
     private static final String MAPVIEW_BUNDLE_KEY = "mapviewbundlekey";
 
 
@@ -89,8 +94,6 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
 
         regionQuickViewAdapter = new RegionRecyclerViewAdapter(null);
         regionQuickView.setAdapter(regionQuickViewAdapter);
-
-        regionQuickViewAdapter.updateItems(Realm.getDefaultInstance().where(Region.class).findAll());
     }
 
     @Override
@@ -150,6 +153,13 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     public void onResume() {
         super.onResume();
         mapView.onResume();
+
+        updateLocations();
+    }
+
+    private void updateLocations() {
+        regions = Realm.getDefaultInstance().where(Region.class).findAll();
+        regionQuickViewAdapter.updateItems(regions);
     }
 
     @Override
@@ -187,9 +197,12 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.googlemaps_style_2));
 
-
         if (lastKnownLocation != null) {
             moveCameraLocation(lastKnownLocation, 18L);
+        }
+
+        for (int i = 0; i < regions.size(); ++i) {
+            addCircle(regions.get(i).getCenter());
         }
     }
 
@@ -197,15 +210,23 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     private void moveCameraLocation(Location location, float zoomValue) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomValue));
+        addCircle(latLng, R.color.text_color_hardblack, R.color.white);
+    }
+
+    private void addCircle(LatLng latLng) {
+        addCircle(latLng, R.color.app_triadic_purple, R.color.app_triadic_purple_lighter);
+    }
+
+    private void addCircle(LatLng latLng, int strokeColorResId, int fillColorResId) {
         map.addCircle(new CircleOptions()
                 .center(latLng)
-                .radius(10) //in meters
-                .strokeColor(ContextCompat.getColor(getContext(), R.color.app_triadic_purple_lighter))
-                .fillColor(ContextCompat.getColor(getContext(), R.color.app_triadic_purple_lighter_alpha))
+                .radius(100) //in meters
+                .strokeColor(ContextCompat.getColor(getContext(), strokeColorResId))
+                .fillColor(ContextCompat.getColor(getContext(), fillColorResId))
         );
-//        map.addMarker(new MarkerOptions().position(latLng).title("pos"));
-//                this.map.addMarker(new MarkerOptions().position(new LatLng(50, 50)).title("Marker"));
     }
+
+
 
     //google play location service callbacks:
     @Override

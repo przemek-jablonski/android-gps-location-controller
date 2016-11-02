@@ -35,6 +35,14 @@ public class Region implements RealmModel{
         return new LatLng(centerLat, centerLon);
     }
 
+    public double getCenterLat() {
+        return centerLat;
+    }
+
+    public double getCenterLon() {
+        return centerLon;
+    }
+
     public void setCenter(LatLng center) {
         centerLat = center.latitude;
         centerLon = center.longitude;

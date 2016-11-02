@@ -2,11 +2,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.android.szparag.gpslocationcontroller.MainMapFragment">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/main_map_mapview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/main_map_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="asddasdasdd asddasddsa as da"
+            android:layout_height="?android:attr/actionBarSize" />
+
+    </LinearLayout>
+
+
+    <com.github.rubensousa.floatingtoolbar.FloatingToolbar
+        android:id="@+id/morphingFabToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="bottom"
+        app:floatingMenu="@menu/menu_quick_actions"
+        android:background="@color/app_primary_orange_light" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_create_black_24dp"
+        app:backgroundTint="?attr/colorPrimaryDark" />
 
 </FrameLayout>

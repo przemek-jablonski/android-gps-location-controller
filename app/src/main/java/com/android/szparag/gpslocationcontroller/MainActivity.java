@@ -20,37 +20,13 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity{
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-
-    @BindView(R.id.morphingFabToolbar)
-    FloatingToolbar morphingFabToolbar;
-
-    @BindView(R.id.activity_main_appbar_layout)
-    AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        morphingFabToolbar.attachFab(fab);
-        morphingFabToolbar.attachAppBarLayout(appBarLayout);
 
     }
 }

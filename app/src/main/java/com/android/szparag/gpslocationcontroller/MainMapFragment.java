@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -38,6 +40,12 @@ import static com.google.android.gms.common.api.GoogleApiClient.*;
 
 public class MainMapFragment extends Fragment implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener {
 
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    @BindView(R.id.morphingFabToolbar)
+    FloatingToolbar morphingFabToolbar;
 
     MapView mapView;
     Bundle bundle;
@@ -88,8 +96,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layoutView = inflater.inflate(R.layout.fragment_main_map, container, false);
+        ButterKnife.bind(this, layoutView);
         mapView = (MapView) layoutView.findViewById(R.id.main_map_mapview);
         mapView.onCreate(bundle);
+
+        morphingFabToolbar.attachFab(fab);
 
         mapView.getMapAsync(this);
         return layoutView;
@@ -103,6 +114,8 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         googleApiClient.registerConnectionCallbacks(this);
         googleApiClient.registerConnectionFailedListener(this);
         googleApiClient.connect();
+
+
     }
 
     @Override

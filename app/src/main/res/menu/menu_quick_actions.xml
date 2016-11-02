@@ -21,6 +21,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_back"
+        android:icon="@drawable/ic_public_black_24dp"
+        android:title="Google+"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_black_24dp"
         android:title="Twitter"

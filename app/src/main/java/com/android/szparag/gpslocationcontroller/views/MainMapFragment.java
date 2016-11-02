@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 
 import com.android.szparag.gpslocationcontroller.GpsLocationControllerApplication;
 import com.android.szparag.gpslocationcontroller.R;
+import com.android.szparag.gpslocationcontroller.adapters.RecyclerOnPosClickListener;
 import com.android.szparag.gpslocationcontroller.adapters.RegionRecyclerViewAdapter;
 import com.android.szparag.gpslocationcontroller.backend.models.Policy;
 import com.android.szparag.gpslocationcontroller.backend.models.Region;
@@ -92,7 +93,12 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
         snapHelper.attachToRecyclerView(regionQuickView);
         ((GravitySnapHelper) snapHelper).enableLastItemSnap(false);
 
-        regionQuickViewAdapter = new RegionRecyclerViewAdapter(null);
+        regionQuickViewAdapter = new RegionRecyclerViewAdapter(new RecyclerOnPosClickListener() {
+            @Override
+            public void OnPosClick(View v, int position) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(regionQuickViewAdapter.getItem(position).getCenter(), 15));
+            }
+        });
         regionQuickView.setAdapter(regionQuickViewAdapter);
     }
 
@@ -189,7 +195,6 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     }
 
 
-
     @Override
     public void onMapReady(GoogleMap map) {
         this.map = map;
@@ -210,7 +215,11 @@ public class MainMapFragment extends Fragment implements OnMapReadyCallback, Con
     private void moveCameraLocation(Location location, float zoomValue) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomValue));
-        addCircle(latLng, R.color.text_color_hardblack, R.color.white);
+        addCircle(latLng, R.color.app_primary_orange_lighter_alpha, R.color.white);
+    }
+
+    private void moveCameraLocation(LatLng latLng, float zoomValue) {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomValue));
     }
 
     private void addCircle(LatLng latLng) {
